@@ -22,11 +22,15 @@
 ```
 brew install portaudio
 pip install faster-whisper sounddevice soundfile numpy pynput
+
+# GUI版额外依赖
+brew install python-tk@3.12
 ```
 
 ## 核心文件
 
-- `voice_claude.py` — 主程序，包含录音、识别、调用Claude Code的完整逻辑
+- `voice_claude.py` — 核心引擎 + CLI版本，包含VoiceClaude类（录音、识别、Claude调用）
+- `voice_claude_gui.py` — GUI版本（tkinter），大按钮界面，适合小朋友使用
 
 ## 交互流程
 
@@ -48,15 +52,22 @@ pip install faster-whisper sounddevice soundfile numpy pynput
 ## macOS权限需求
 
 首次运行需授权：
-- 麦克风权限：终端app需要访问麦克风
-- 辅助功能权限：系统设置 → 隐私与安全 → 辅助功能 → 添加终端app（用于pynput监听键盘）
+- 麦克风权限：终端app（CLI）或Python（GUI）需要访问麦克风
+- 辅助功能权限（仅CLI版）：系统设置 → 隐私与安全 → 辅助功能 → 添加终端app（用于pynput监听键盘）
+- GUI版不需要辅助功能权限，因为使用鼠标点击而非全局键盘监听
 
 ## 命令行参数
 
 ```
+# CLI版（需要记键盘操作：空格录音，ESC退出）
 python voice_claude.py                     # 默认medium模型
 python voice_claude.py --model large-v3    # 更高精度
 python voice_claude.py --test              # 测试模式，只转文字不调用Claude Code
+
+# GUI版（大按钮界面，适合小朋友）
+python voice_claude_gui.py                 # 默认medium模型
+python voice_claude_gui.py --model large-v3
+python voice_claude_gui.py --test          # 测试模式
 ```
 
 ## 代码规范
@@ -68,7 +79,7 @@ python voice_claude.py --test              # 测试模式，只转文字不调�
 
 ## 后续可扩展方向
 
-- 添加一个简易GUI（大按钮界面），Damian不需要记键盘操作
+- ~~添加一个简易GUI（大按钮界面），Damian不需要记键盘操作~~ ✅ 已实现 voice_claude_gui.py
 - 支持语音反馈（TTS），让Claude Code的输出也能读出来
 - 添加"连续对话"模式，调用 `claude` 的交互模式而非 `-p` 单次模式
 - 支持自动打开Claude Code生成的HTML/游戏文件
